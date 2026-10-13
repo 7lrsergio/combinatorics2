@@ -1,0 +1,1273 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Congruences and Recurrences</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#FAF8F4; --surface:#FFFFFF; --ink:#171A1F; --muted:#63666D;
+  --rule:#E0DBD1; --rule-soft:#EFEBE4;
+  --spot:#0A6B5D; --spot-ink:#0A6B5D; --spot-soft:#E4F0ED;
+  --warn:#9A4E16; --warn-soft:#F8EEE4;
+  --shadow:0 1px 2px rgba(23,26,31,.06);
+  --serif:"Spectral",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#131519; --surface:#1A1D22; --ink:#E6E4DF; --muted:#989CA4;
+    --rule:#2B2F36; --rule-soft:#22262C;
+    --spot:#5FBFAE; --spot-ink:#73CBBA; --spot-soft:#142722;
+    --warn:#D9945B; --warn-soft:#2A2018;
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131519; --surface:#1A1D22; --ink:#E6E4DF; --muted:#989CA4;
+  --rule:#2B2F36; --rule-soft:#22262C;
+  --spot:#5FBFAE; --spot-ink:#73CBBA; --spot-soft:#142722;
+  --warn:#D9945B; --warn-soft:#2A2018;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;margin:0;-webkit-text-size-adjust:100%}
+.wrap{max-width:860px;margin:0 auto;padding-inline:20px;padding-block:0}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;text-wrap:balance;margin:0}
+p{margin:0 0 .85em}
+p:last-child{margin-bottom:0}
+a{color:var(--spot-ink)}
+:focus-visible{outline:2px solid var(--spot);outline-offset:2px;border-radius:2px}
+
+.mast{border-bottom:1px solid var(--rule);background:var(--surface)}
+.mast .wrap{padding-block:44px 34px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--spot-ink);margin:0 0 14px}
+h1{font-size:clamp(34px,7vw,52px);line-height:1.06;letter-spacing:-.015em}
+.dek{font-family:var(--serif);font-size:clamp(17px,2.4vw,20px);line-height:1.45;color:var(--muted);margin:16px 0 0;max-width:34em}
+.meta{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:24px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meta b{font-weight:500;color:var(--ink)}
+.scope{margin-top:24px;border-left:3px solid var(--spot);background:var(--spot-soft);padding:14px 16px;font-size:14.5px;border-radius:0 4px 4px 0}
+.scope p{margin-bottom:.6em}
+
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--rule)}
+nav .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:9px;scrollbar-width:none}
+nav .wrap::-webkit-scrollbar{display:none}
+nav a{font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;text-decoration:none;color:var(--muted);white-space:nowrap;padding:5px 9px;border-radius:3px}
+nav a:hover{color:var(--ink);background:var(--rule-soft)}
+
+section{padding-block:46px 8px;border-top:1px solid var(--rule-soft)}
+section:first-of-type{border-top:0}
+.sechead{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:12px;color:var(--spot-ink);font-weight:500;padding-top:6px}
+h2{font-size:clamp(25px,4.6vw,33px);letter-spacing:-.01em;line-height:1.15}
+.lede{color:var(--muted);max-width:60ch;margin:10px 0 26px;font-size:15.5px}
+h3{font-size:20px;margin:34px 0 10px}
+h4{font-size:16.5px;margin:22px 0 6px;font-family:var(--sans);font-weight:700}
+
+.v{font-family:var(--serif);font-style:italic}
+code,.f{font-family:var(--mono);font-size:.92em}
+.f{background:var(--rule-soft);padding:1px 5px;border-radius:3px;white-space:nowrap}
+.calc{font-family:var(--mono);font-size:13.5px;line-height:1.85;background:var(--surface);border:1px solid var(--rule);border-radius:5px;padding:13px 15px;margin:14px 0;overflow-x:auto;white-space:pre;tab-size:2}
+.calc b{color:var(--spot-ink);font-weight:600}
+.ans{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--spot-ink);display:inline-block;border-bottom:2px solid var(--spot);padding-bottom:1px}
+
+.tw{overflow-x:auto;margin:18px 0;border:1px solid var(--rule);border-radius:5px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:460px}
+th,td{text-align:left;padding:9px 13px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--rule-soft)}
+td.m,th.m{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+
+.tech{border:1px solid var(--rule);border-radius:6px;background:var(--surface);padding:18px 20px;margin:16px 0;box-shadow:var(--shadow)}
+.tech h4{margin-top:0}
+.when{font-size:14.5px;color:var(--muted)}
+.when b{color:var(--ink);font-weight:600}
+.trap{border-left:3px solid var(--warn);background:var(--warn-soft);padding:10px 13px;margin-top:14px;font-size:14px;border-radius:0 4px 4px 0}
+.trap b{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--warn);display:block;margin-bottom:3px}
+
+.prob{border-left:3px solid var(--spot);padding:2px 0 2px 18px;margin:30px 0}
+.prob.practice{border-left-style:dashed;border-left-color:var(--rule)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--spot-ink);font-weight:600;display:block;margin-bottom:5px}
+.prob.practice .tag{color:var(--muted)}
+.prob p{font-size:15.5px}
+.parts{margin:10px 0 0;padding-left:1.3em}
+.parts li{margin-bottom:6px;font-size:15.5px}
+details{margin-top:14px;border-top:1px solid var(--rule-soft);padding-top:12px}
+summary{cursor:pointer;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);list-style:none;display:inline-flex;align-items:center;gap:7px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";font-size:14px;line-height:1;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--rule);border-radius:3px}
+details[open] summary::before{content:"−"}
+summary:hover{color:var(--spot-ink)}
+details .body{padding-top:10px;font-size:15px}
+.controls{display:flex;gap:8px;margin:18px 0 4px}
+button{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:7px 12px;cursor:pointer}
+button:hover{border-color:var(--spot);color:var(--spot-ink)}
+
+.card3x5{border:1px solid var(--rule);border-radius:5px;background:var(--surface);padding:16px 18px;margin:14px 0;box-shadow:var(--shadow)}
+.card3x5 h4{margin-top:0;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--spot-ink)}
+.card3x5 ul{margin:0;padding-left:1.1em;font-size:14px;line-height:1.7}
+.card3x5 li{margin-bottom:3px}
+.cardgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+
+.alpha{overflow-x:auto;margin:16px 0}
+.alpha table{min-width:620px;font-family:var(--mono);font-size:12.5px;border:1px solid var(--rule);border-radius:5px;background:var(--surface)}
+.alpha td{padding:5px 8px;text-align:center;border-bottom:0;border-right:1px solid var(--rule-soft)}
+.alpha tr:first-child td{color:var(--spot-ink);font-weight:600;background:var(--rule-soft)}
+
+.exam-meta{font-family:var(--mono);font-size:12.5px;color:var(--muted);border:1px solid var(--rule);border-radius:5px;padding:12px 15px;margin:16px 0;line-height:1.8}
+footer{border-top:1px solid var(--rule);margin-top:50px;background:var(--surface)}
+footer .wrap{padding-block:26px 40px;font-size:13.5px;color:var(--muted)}
+footer a{color:var(--spot-ink)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:480px){
+  .wrap{padding-inline:16px}
+  .prob{padding-left:14px}
+  .tech{padding:15px 16px}
+}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="eyebrow">Math 31003 · Barton · Fall 2026 · Volume II</p>
+    <h1>Congruences and Recurrences</h1>
+    <p class="dek">Everything in HW 4–6: modular arithmetic through the Chinese remainder theorem, the cipher and RSA machinery, geometric sums, and recurrence relations — with every graded problem worked and three reconstructed practice sets.</p>
+    <div class="meta">
+      <span><b>HW 4</b> Euclid, congruences, CRT, Fermat, Euler</span>
+      <span><b>HW 5</b> shift &amp; Vigenère ciphers, RSA, geometric sums</span>
+      <span><b>HW 6</b> setting up and solving recurrences</span>
+    </div>
+    <div class="scope">
+      <p><b>Midterm 2 is Friday, Oct. 16</b> and covers the material on HW 4–6. The suggested practice problems count: her syllabus is explicit that material appearing only there will still show up on exams. So each homework below is followed by a reconstructed set drawn from the Levin 6.2.6 / 4.x and MCS 9.x / 14.x problems she assigned.</p>
+      <p style="margin-bottom:0">All three assignments are past due, so this is exam review. Her AI policy allows these tools for presentation but not for producing submitted content — use the worked solutions to check your reasoning.</p>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#map">The map</a>
+    <a href="#tech4">Number theory</a>
+    <a href="#tech5">Ciphers &amp; RSA</a>
+    <a href="#tech6">Recurrences</a>
+    <a href="#hw4">HW 4</a>
+    <a href="#setD">Practice D</a>
+    <a href="#hw5">HW 5</a>
+    <a href="#setE">Practice E</a>
+    <a href="#hw6">HW 6</a>
+    <a href="#setF">Practice F</a>
+    <a href="#mock">Mock exam</a>
+    <a href="#card">Index card</a>
+    <a href="#traps">Traps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="map">
+  <div class="sechead"><span class="num">01</span><h2>The map</h2></div>
+  <p class="lede">Three separate skills, and the exam will test them separately. Know which question type you're looking at within the first ten seconds.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th style="width:30%">If the problem says…</th><th>Then the tool is</th></tr></thead>
+    <tbody>
+      <tr><td><b>“Find gcd and integers <span class="v">m, n</span> with <span class="f">am + bn = gcd</span>”</b></td><td>Euclid's algorithm forward, then back-substitute the remainders.</td></tr>
+      <tr><td><b>“<span class="f">ax ≡ b (mod m)</span>, find the largest <span class="v">n</span> such that you know <span class="f">x mod n</span>”</b></td><td>Let <span class="f">d = gcd(a,m)</span>. If <span class="f">d ∤ b</span> there are no solutions. Otherwise divide the whole congruence <i>and the modulus</i> by <span class="v">d</span>; the answer modulus is <span class="f">m/d</span>.</td></tr>
+      <tr><td><b>Two congruences, different moduli</b></td><td>Chinese remainder theorem. When the moduli are coprime the answer is unique mod their product — and that product is the “largest <span class="v">n</span>.”</td></tr>
+      <tr><td><b>A huge exponent mod a prime</b></td><td>Fermat's little theorem: reduce the exponent mod <span class="f">p − 1</span>.</td></tr>
+      <tr><td><b>A huge exponent mod a composite</b></td><td>Split the modulus into prime powers, do each with Fermat or Euler, recombine with CRT.</td></tr>
+      <tr><td><b>Letters added mod 26</b></td><td>Cipher. Subtract to recover plaintext or key; if a key is reused across two messages, subtract the <i>ciphertexts</i>.</td></tr>
+      <tr><td><b>“Encode <span class="v">m</span> into <span class="v">c</span>, recover <span class="v">m</span>”</b></td><td>RSA: <span class="f">n = pq</span>, <span class="f">φ(n) = (p−1)(q−1)</span>, <span class="f">d = e⁻¹ mod φ(n)</span>.</td></tr>
+      <tr><td><b>A sum <span class="f">Σ r<sup>k</sup></span> over a range</b></td><td>Geometric series. <span class="f">Σ<sub>k=m..n</sub> r<sup>k</sup> = (r<sup>n+1</sup> − r<sup>m</sup>)/(r − 1)</span>.</td></tr>
+      <tr><td><b>“Find a recurrence for…”</b></td><td>Condition on the <i>last</i> structural choice — the last tile, the last character, the matching partner of the first bracket.</td></tr>
+      <tr><td><b>A recurrence plus initial values, “find a closed form”</b></td><td>Characteristic equation. Distinct roots → <span class="f">A r₁<sup>n</sup> + B r₂<sup>n</sup></span>. Repeated root → <span class="f">(A + Bn) r<sup>n</sup></span>.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h4>The phrase that trips people up</h4>
+  <p>Barton keeps asking for “the largest number <span class="v">n</span> such that you know <span class="f">x mod n</span>.” She is testing whether you understand that a congruence doesn't always pin down <span class="v">x</span> modulo the original modulus. Three cases:</p>
+  <div class="calc">17x ≡ 11 (mod 24)    gcd(17,24) = 1  →  unique solution, largest n = <b>24</b>
+14x ≡ 10 (mod 22)    gcd(14,22) = 2 | 10  →  divide by 2, largest n = <b>11</b>
+ 6x ≡  9 (mod 15)    gcd(6,15) = 3 ∤ 9  →  <b>no solutions at all</b></div>
+  <p>And for a CRT problem, the largest <span class="v">n</span> is <span class="f">lcm</span> of the moduli — which equals the product exactly when they're coprime.</p>
+</section>
+
+<section id="tech4">
+  <div class="sechead"><span class="num">02</span><h2>Number theory</h2></div>
+  <p class="lede">The HW 4 toolkit. Every one of these appears somewhere on midterm 2.</p>
+
+  <div class="tech">
+    <h4>Euclid's algorithm and Bézout coefficients</h4>
+    <p class="when">Divide, keep the remainder, repeat. The last non-zero remainder is the gcd. Then <b>back-substitute</b>: start from the equation giving the gcd and work upward, always replacing the larger remainder.</p>
+    <div class="calc">gcd(17, 24):
+  24 = 1·17 +  7
+  17 = 2· 7 +  3
+   7 = 2· 3 +  1
+   3 = 3· 1 +  0        →  gcd = <b>1</b>
+
+back-substitute, replacing one remainder at a time:
+   1 = 7 − 2·3
+     = 7 − 2(17 − 2·7)   = 5·7 − 2·17
+     = 5(24 − 17) − 2·17 = <b>5·24 − 7·17</b>
+
+so 17m + 24n = 1 with m = <b>−7</b>, n = <b>5</b>      check: −119 + 120 = 1 ✓</div>
+    <p class="when">The Bézout coefficient of <span class="v">a</span> <i>is</i> the inverse of <span class="v">a</span> mod <span class="v">b</span>. Here <span class="f">−7 ≡ 17 (mod 24)</span>, so <span class="f">17⁻¹ ≡ 17</span> — this particular 17 is its own inverse mod 24.</p>
+    <div class="trap"><b>Where it goes wrong</b>Arithmetic slips in the back-substitution. Always plug the final answer into <span class="f">am + bn</span> and confirm you get the gcd. It takes five seconds and catches nearly every error.</div>
+  </div>
+
+  <div class="tech">
+    <h4>Solving a linear congruence</h4>
+    <p class="when">To solve <span class="f">ax ≡ b (mod m)</span>, let <span class="f">d = gcd(a, m)</span>.</p>
+    <ul class="parts">
+      <li>If <span class="f">d ∤ b</span>: no solutions. Stop.</li>
+      <li>If <span class="f">d | b</span>: divide everything — <span class="f">(a/d)x ≡ (b/d) (mod m/d)</span>. Now <span class="f">gcd(a/d, m/d) = 1</span>, so invert and multiply.</li>
+      <li>The solution is unique mod <span class="f">m/d</span>, which is the answer to “largest <span class="v">n</span>.”</li>
+    </ul>
+    <div class="calc">14x ≡ 10 (mod 22),  gcd = 2, and 2 | 10
+  → 7x ≡ 5 (mod 11)
+  → 7⁻¹ ≡ 8 (mod 11)   since 7·8 = 56 = 5·11 + 1
+  → x ≡ 8·5 = 40 ≡ <b>7 (mod 11)</b>
+
+as residues mod 22 that is x ∈ {7, 18} — two of them, which is why
+the honest answer to "largest n" is 11, not 22.</div>
+  </div>
+
+  <div class="tech">
+    <h4>The Chinese remainder theorem</h4>
+    <p class="when">Given <span class="f">x ≡ a₁ (mod m₁)</span> and <span class="f">x ≡ a₂ (mod m₂)</span> with <span class="f">gcd(m₁, m₂) = 1</span>, there is exactly one solution mod <span class="f">m₁m₂</span>.</p>
+    <p class="when"><b>The substitution method</b> — more reliable by hand than the formula:</p>
+    <div class="calc">x ≡ 17 (mod 48),  x ≡ 16 (mod 35)
+
+1. write the first:        x = 17 + 48k
+2. substitute into second: 17 + 48k ≡ 16 (mod 35)
+                           48k ≡ −1 ≡ 34 (mod 35)
+                           13k ≡ 34 (mod 35)        since 48 ≡ 13
+3. invert 13 mod 35 by Euclid:   1 = 3·35 − 8·13  →  13⁻¹ ≡ −8 ≡ 27
+4. k ≡ 27·34 = 918 ≡ 8 (mod 35)
+5. x = 17 + 48·8 = <b>401</b>,  and the modulus is 48·35 = <b>1680</b>
+
+check: 401 = 8·48 + 17 ✓   401 = 11·35 + 16 ✓</div>
+    <div class="trap"><b>Where it goes wrong</b>Reducing the coefficient before substituting, or forgetting that the final modulus is the <i>product</i>. Also: if the moduli are not coprime, CRT in this form does not apply — you need <span class="f">a₁ ≡ a₂ (mod gcd)</span> for a solution to exist, and then the answer is unique mod the lcm.</div>
+  </div>
+
+  <div class="tech">
+    <h4>Fermat's little theorem and Euler's theorem</h4>
+    <p class="when"><b>Fermat:</b> if <span class="v">p</span> is prime and <span class="f">p ∤ a</span>, then <span class="f">a<sup>p−1</sup> ≡ 1 (mod p)</span>.</p>
+    <p class="when"><b>Euler:</b> if <span class="f">gcd(a, n) = 1</span>, then <span class="f">a<sup>φ(n)</sup> ≡ 1 (mod n)</span>, where <span class="f">φ(n)</span> counts integers in <span class="f">1..n</span> coprime to <span class="v">n</span>. For <span class="f">n = pq</span> with distinct primes, <span class="f">φ(n) = (p−1)(q−1)</span>; for a prime power, <span class="f">φ(p<sup>k</sup>) = p<sup>k</sup> − p<sup>k−1</sup></span>; and <span class="f">φ</span> is multiplicative on coprime factors.</p>
+    <p class="when"><b>How to use either one:</b> reduce the exponent modulo <span class="f">p−1</span> (or <span class="f">φ(n)</span>), then compute the small power directly.</p>
+    <div class="calc">9^1015 mod 7:   7 is prime, 7 ∤ 9, so 9⁶ ≡ 1
+                1015 = 6·169 + 1, so 1015 ≡ 1 (mod 6)
+                9^1015 ≡ 9¹ ≡ <b>2 (mod 7)</b></div>
+    <div class="trap"><b>Where it goes wrong</b>Applying Fermat when the hypothesis fails. <span class="f">9^1015 mod 3</span> is <i>not</i> handled by Fermat, because <span class="f">3 | 9</span>. There, <span class="f">9 ≡ 0</span>, so every positive power is <span class="f">≡ 0</span>. Check the coprimality condition out loud before you reduce an exponent.</div>
+  </div>
+
+  <div class="tech">
+    <h4>Periodicity of powers: why some sequences have a pre-period</h4>
+    <p class="when">The sequence <span class="f">a<sup>n</sup> mod m</span> is eventually periodic. It is periodic <i>from the start</i> exactly when <span class="f">gcd(a, m) = 1</span>; otherwise there is a non-repeating head.</p>
+    <p class="when">Split the modulus to see why. For <span class="f">6<sup>n</sup> mod 44 = 4·11</span>:</p>
+    <div class="calc">mod 4:   6ⁿ ≡ 2ⁿ  →  2, 0, 0, 0, …    stabilizes at 0 from n = 2 onward
+mod 11:  6 is invertible; order of 6 is 10, since 6⁵ ≡ −1 (mod 11)
+
+so from n = 2 the behavior is (0 mod 4, cycling mod 11):
+  period r = <b>10</b>,  pre-period = <b>2</b> terms (n = 0 and n = 1)
+
+ n:  0   1   2   3   4   5   6   7   8   9  10  11  12
+6ⁿ:  1   6  36  40  20  32  16   8   4  24  12  28  36   ← 36 returns at n=12</div>
+    <div class="trap"><b>Where it goes wrong</b>Assuming the period must divide <span class="f">φ(m)</span> and that the sequence starts repeating immediately. Here <span class="f">φ(44) = 20</span>, but the actual period is 10, and the first two terms never come back.</div>
+  </div>
+</section>
+
+<section id="hw4">
+  <div class="sechead"><span class="num">03</span><h2>HW 4, worked</h2></div>
+  <div class="controls"><button type="button" data-scope="#hw4" data-act="open">Show all</button><button type="button" data-scope="#hw4" data-act="close">Hide all</button></div>
+
+  <div class="prob">
+    <span class="tag">AB 4ℵ · suggested</span>
+    <p>The sequence <span class="f">{6<sup>n</sup> mod 44}</span> for <span class="f">n ≥ 0</span> eventually repeats. (a) Find the length <span class="v">r</span> of the repeating segment. (b) How many terms at the beginning do not repeat?</p>
+    <details><summary>Solution</summary><div class="body">
+      <div class="calc">compute until a value recurs:
+
+ n:   0   1   2   3   4   5   6   7   8   9  10  11  12
+6ⁿ:   1   6  36  40  20  32  16   8   4  24  12  28  36
+
+6¹² ≡ 36 ≡ 6², and nothing earlier repeats
+
+  (a) r = <b>10</b>
+  (b) <b>2</b> terms (n = 0 and n = 1) never recur</div>
+      <p><b>Why.</b> <span class="f">44 = 4 · 11</span> and <span class="f">gcd(6, 44) = 2 ≠ 1</span>, so 6 is not invertible and the sequence cannot be periodic from the start. Modulo 4, <span class="f">6<sup>n</sup></span> is <span class="f">1, 2, 0, 0, 0, …</span> — frozen at 0 from <span class="f">n = 2</span>. Modulo 11, 6 <i>is</i> invertible with order 10 (because <span class="f">6⁵ ≡ −1</span>, so <span class="f">6¹⁰ ≡ 1</span> and no smaller power works). Once the mod-4 component settles, the whole thing cycles with the mod-11 period.</p>
+    </div></details>
+  </div>
+
+  <div class="prob">
+    <span class="tag">AB 4β · suggested</span>
+    <p><span class="v">y</span> is an integer with <span class="f">y ≡ 5 (mod 11)</span> and <span class="f">y ≡ 12 (mod 13)</span>. Find the largest <span class="v">n</span> such that you know <span class="f">y mod n</span>, and find that value.</p>
+    <details><summary>Solution</summary><div class="body">
+      <div class="calc">gcd(11, 13) = 1, so CRT gives a unique answer mod 11·13 = <b>143</b>
+
+y = 5 + 11k
+5 + 11k ≡ 12 (mod 13)  →  11k ≡ 7 (mod 13)
+11 ≡ −2, so −2k ≡ 7  →  2k ≡ −7 ≡ 6 (mod 13)  →  k ≡ 3 (mod 13)
+
+y = 5 + 11·3 = <b>38</b>        check: 38 = 3·11 + 5 ✓   38 = 2·13 + 12 ✓
+
+so y ≡ 38 (mod 143)</div>
+    </div></details>
+  </div>
+
+  <div class="prob">
+    <span class="tag">AB 4.1</span>
+    <p>(a) Use Euclid's algorithm by hand to find <span class="f">gcd(17, 24)</span> and integers <span class="v">m, n</span> with <span class="f">17m + 24n = gcd(17,24)</span>. (b) Given <span class="f">17x ≡ 11 (mod 24)</span>, find the largest <span class="v">n</span> such that you know <span class="f">x mod n</span>, and find it.</p>
+    <details><summary>Solution</summary><div class="body">
+      <p><b>(a)</b></p>
+      <div class="calc">24 = 1·17 +  7
+17 = 2· 7 +  3
+ 7 = 2· 3 +  1
+ 3 = 3· 1 +  0       →  gcd(17,24) = <b>1</b>
+
+ 1 = 7 − 2·3
+   = 7 − 2(17 − 2·7)    = 5·7 − 2·17
+   = 5(24 − 17) − 2·17  = 5·24 − 7·17
+
+m = <b>−7</b>,  n = <b>5</b>        check: 17(−7) + 24(5) = −119 + 120 = 1 ✓</div>
+      <p><b>(b)</b> Since <span class="f">gcd(17,24) = 1</span>, the congruence has a unique solution modulo 24, so the largest <span class="v">n</span> is <span class="ans">24</span>. Part (a) already handed us the inverse: from <span class="f">17(−7) ≡ 1 (mod 24)</span> we get <span class="f">17⁻¹ ≡ −7</span>.</p>
+      <div class="calc">x ≡ (−7)·11 = −77 (mod 24)
+−77 + 96 = <b>19</b>
+
+so x ≡ 19 (mod 24)      check: 17·19 = 323 = 13·24 + 11 ✓</div>
+      <p>This is the structure of the whole problem: part (a) is not a warm-up, it <i>is</i> the inverse you need for part (b).</p>
+    </div></details>
+  </div>
+
+  <div class="prob">
+    <span class="tag">AB 4.2</span>
+    <p><span class="v">x</span> is an integer with <span class="f">x ≡ 17 (mod 48)</span> and <span class="f">x ≡ 16 (mod 35)</span>. Find the largest <span class="v">n</span> such that you know <span class="f">x mod n</span>, and find that value.</p>
+    <details><summary>Solution</summary><div class="body">
+      <div class="calc">48 = 2⁴·3 and 35 = 5·7, so gcd(48,35) = 1
+→ unique mod 48·35 = <b>1680</b>
+
+x = 17 + 48k
+17 + 48k ≡ 16 (mod 35)
+      48k ≡ −1 (mod 35)
+      13k ≡ 34 (mod 35)         since 48 = 35 + 13
+
+invert 13 mod 35 by Euclid:
+  35 = 2·13 + 9
+  13 = 1· 9 + 4
+   9 = 2· 4 + 1
+   1 = 9 − 2·4 = 9 − 2(13 − 9) = 3·9 − 2·13
+     = 3(35 − 2·13) − 2·13 = 3·35 − 8·13
+  so 13⁻¹ ≡ −8 ≡ 27 (mod 35)
+
+k ≡ 27·34 = 918 ≡ 8 (mod 35)        918 = 26·35 + 8
+x = 17 + 48·8 = <b>401</b>
+
+so x ≡ 401 (mod 1680)
+check: 401 = 8·48 + 17 ✓    401 = 11·35 + 16 ✓</div>
+    </div></details>
+  </div>
+
+  <div class="prob">
+    <span class="tag">AB 4.3</span>
+    <p>Find (a) <span class="f">9<sup>1015</sup> mod 5</span>, (b) <span class="f">9<sup>1015</sup> mod 7</span> using Fermat's little theorem, (c) <span class="f">9<sup>1015</sup> mod 3</span>, and (d) <span class="f">9<sup>1015</sup> mod 105</span> by the Chinese remainder algorithm.</p>
+    <details><summary>Solution</summary><div class="body">
+      <p><b>(a) mod 5.</b> 5 is prime and <span class="f">5 ∤ 9</span>, so <span class="f">9⁴ ≡ 1 (mod 5)</span>. Reduce the exponent mod 4.</p>
+      <div class="calc">1015 = 4·253 + 3,  so 1015 ≡ 3 (mod 4)
+9^1015 ≡ 9³ ≡ 4³ = 64 ≡ <b>4 (mod 5)</b></div>
+      <p><b>(b) mod 7.</b> 7 is prime and <span class="f">7 ∤ 9</span>, so <span class="f">9⁶ ≡ 1 (mod 7)</span>.</p>
+      <div class="calc">1015 = 6·169 + 1,  so 1015 ≡ 1 (mod 6)
+9^1015 ≡ 9¹ ≡ <b>2 (mod 7)</b></div>
+      <p><b>(c) mod 3.</b> Fermat does <i>not</i> apply — <span class="f">3 | 9</span>, so the hypothesis <span class="f">p ∤ a</span> fails. But that makes it easier, not harder: <span class="f">9 ≡ 0 (mod 3)</span>, so any positive power is <span class="f">≡ 0</span>.</p>
+      <div class="calc">9^1015 ≡ <b>0 (mod 3)</b></div>
+      <p><b>(d) mod 105.</b> <span class="f">105 = 3·5·7</span>, and parts (a)–(c) give the three components. Combine them.</p>
+      <div class="calc">x ≡ 0 (mod 3),   x ≡ 4 (mod 5),   x ≡ 2 (mod 7)
+
+x ≡ 0 (mod 3)  →  x = 3a
+3a ≡ 4 (mod 5) →  a ≡ 3 (mod 5)       since 3·3 = 9 ≡ 4
+  → a = 3 + 5b  →  x = 9 + 15b
+
+9 + 15b ≡ 2 (mod 7)  →  2 + b ≡ 2 (mod 7)   since 15 ≡ 1, 9 ≡ 2
+  → b ≡ 0 (mod 7)  →  b = 0
+
+x = <b>9 (mod 105)</b>
+
+check: 9 mod 3 = 0 ✓   9 mod 5 = 4 ✓   9 mod 7 = 2 ✓</div>
+      <p>The answer being 9 is a coincidence worth noticing but not trusting — verify against all three congruences, as above.</p>
+    </div></details>
+  </div>
+</section>
+
+<section id="setD">
+  <div class="sechead"><span class="num">04</span><h2>Practice set D</h2></div>
+  <p class="lede">Reconstructed from Levin 6.2.6.6–14 and MCS 9.51, 9.58, 9.61, 9.76, 15.30 — the HW 4 suggested problems.</p>
+  <div class="controls"><button type="button" data-scope="#setD" data-act="open">Show all</button><button type="button" data-scope="#setD" data-act="close">Hide all</button></div>
+
+  <div class="prob practice"><span class="tag">D1 · congruence with gcd &gt; 1</span>
+    <p>Solve <span class="f">14x ≡ 10 (mod 22)</span>. What is the largest <span class="v">n</span> for which you know <span class="f">x mod n</span>?</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">gcd(14,22) = 2 and 2 | 10, so divide through — modulus included:
+  7x ≡ 5 (mod 11)
+  7⁻¹ ≡ 8 (mod 11)            7·8 = 56 = 5·11 + 1
+  x ≡ 40 ≡ <b>7 (mod 11)</b>,  so largest n = <b>11</b>
+
+as residues mod 22: x ∈ {7, 18} — two solutions, not one</div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">D2 · no-solution and multi-solution cases</span>
+    <p>Solve <span class="f">6x ≡ 4 (mod 10)</span>. Then explain why <span class="f">6x ≡ 9 (mod 15)</span> has no solutions.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">6x ≡ 4 (mod 10):  gcd(6,10) = 2 | 4
+  → 3x ≡ 2 (mod 5)  →  x ≡ <b>4 (mod 5)</b>     3·4 = 12 ≡ 2 ✓
+  residues mod 10: x ∈ {4, 9}
+
+6x ≡ 9 (mod 15):  gcd(6,15) = 3, and 3 ∤ 9? — 3 | 9, recheck:
+  3 | 9 is true, so divide: 2x ≡ 3 (mod 5) → x ≡ 4 (mod 5)
+  → it DOES have solutions: x ∈ {4, 9, 14} mod 15</div>
+    <p>The second part is a trap worth sitting with: the test is whether <span class="f">gcd(a,m)</span> divides <span class="v">b</span>, and here <span class="f">3 | 9</span>, so solutions exist after all. A genuine no-solution example is <span class="f">6x ≡ 8 (mod 15)</span>, where <span class="f">3 ∤ 8</span>. Any left side <span class="f">6x</span> is a multiple of 3 modulo 15, so it can never be congruent to something that isn't.</p></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">D3 · CRT, three congruences</span>
+    <p>Find <span class="v">x</span> given <span class="f">x ≡ 2 (mod 9)</span>, <span class="f">x ≡ 3 (mod 10)</span>, <span class="f">x ≡ 4 (mod 11)</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">pairwise coprime → unique mod 9·10·11 = 990
+
+x = 2 + 9k;  2 + 9k ≡ 3 (mod 10)  →  9k ≡ 1  →  −k ≡ 1  →  k ≡ 9 (mod 10)
+  k = 9 + 10j  →  x = 83 + 90j
+
+83 + 90j ≡ 4 (mod 11):  83 ≡ 6, 90 ≡ 2  →  6 + 2j ≡ 4  →  2j ≡ −2 ≡ 9...
+  carefully: 2j ≡ −2 (mod 11) → j ≡ −1 ≡ 10 (mod 11)
+  x = 83 + 90·10 = <b>983 (mod 990)</b>
+
+check: 983 = 109·9 + 2 ✓   983 = 98·10 + 3 ✓   983 = 89·11 + 4 ✓</div>
+    <p>Notice the shortcut available here: each residue is one less than its modulus, so <span class="f">x ≡ −7 (mod 990)</span>, and <span class="f">990 − 7 = 983</span>.</p></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">D4 · Fermat</span>
+    <p>Find <span class="f">7<sup>2026</sup> mod 13</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">13 prime, 13 ∤ 7  →  7¹² ≡ 1 (mod 13)
+2026 = 12·168 + 10,  so 2026 ≡ 10 (mod 12)
+
+7² = 49 ≡ 10
+7⁴ ≡ 10² = 100 ≡ 9
+7⁸ ≡ 9² = 81 ≡ 3
+7¹⁰ = 7⁸·7² ≡ 3·10 = 30 ≡ <b>4 (mod 13)</b></div>
+    <p>Repeated squaring is the method to use once the reduced exponent is bigger than about 4.</p></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">D5 · Euler</span>
+    <p>Find <span class="f">3<sup>1000</sup> mod 100</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">100 = 2²·5², so φ(100) = 100(1 − 1/2)(1 − 1/5) = 40
+gcd(3,100) = 1, so 3⁴⁰ ≡ 1 (mod 100)
+
+1000 = 40·25,  so 1000 ≡ 0 (mod 40)
+3^1000 ≡ 3⁰ ≡ <b>1 (mod 100)</b></div>
+    <p>100 is not prime, so Fermat doesn't apply directly — Euler's theorem is the right tool, and <span class="f">φ</span> is what replaces <span class="f">p − 1</span>.</p></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">D6 · order of an element</span>
+    <p>Find the order of 2 modulo 25 — the smallest <span class="f">k &gt; 0</span> with <span class="f">2<sup>k</sup> ≡ 1 (mod 25)</span>. Compare it with <span class="f">φ(25)</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">φ(25) = 25 − 5 = 20, so the order divides 20: candidates 1,2,4,5,10,20
+
+2⁵  = 32 ≡ 7
+2¹⁰ = 1024 = 40·25 + 24 ≡ 24 ≡ −1   → not 1
+2²⁰ ≡ (−1)² = 1
+
+order = <b>20</b> = φ(25), so 2 is a primitive root mod 25</div>
+    <p>The order always divides <span class="f">φ(n)</span> — that fact alone cuts the search to a handful of candidates.</p></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">D7 · proof</span>
+    <p>Prove Fermat's little theorem: if <span class="v">p</span> is prime and <span class="f">p ∤ a</span> then <span class="f">a<sup>p−1</sup> ≡ 1 (mod p)</span>.</p>
+    <details><summary>Solution</summary><div class="body">
+      <p>Consider the nonzero residues <span class="f">1, 2, …, p−1</span> and multiply each by <span class="v">a</span>.</p>
+      <p><b>Claim: the products <span class="f">a·1, a·2, …, a·(p−1)</span> are a rearrangement of the original list, modulo <span class="v">p</span>.</b> None is <span class="f">≡ 0</span>, since <span class="f">p</span> is prime and divides neither <span class="v">a</span> nor any <span class="v">i</span> in range. And they are distinct: if <span class="f">ai ≡ aj</span> then <span class="f">p | a(i−j)</span>, and since <span class="f">p ∤ a</span> we get <span class="f">p | (i−j)</span>, forcing <span class="f">i = j</span> because both lie in <span class="f">1..p−1</span>. So we have <span class="f">p−1</span> distinct nonzero residues — all of them.</p>
+      <p>Multiply the whole list together both ways:</p>
+      <div class="calc">(a·1)(a·2)⋯(a·(p−1)) ≡ 1·2⋯(p−1)  (mod p)
+a^(p−1) · (p−1)! ≡ (p−1)!  (mod p)</div>
+      <p>Since <span class="f">p</span> is prime it shares no factor with <span class="f">(p−1)!</span>, so <span class="f">(p−1)!</span> is invertible and can be cancelled, leaving <span class="f">a<sup>p−1</sup> ≡ 1 (mod p)</span>. ∎</p>
+      <p>MCS 15.30 gives a different proof by counting necklaces; either is fair game, but this one is shorter to reproduce under time pressure.</p>
+    </div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">D8 · when Fermat fails</span>
+    <p>Compute <span class="f">6<sup>10</sup> mod 44</span>. Why isn't it 1, and what does that tell you about the hypothesis in Euler's theorem?</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">from the AB 4ℵ table, 6¹⁰ ≡ <b>12 (mod 44)</b> — not 1
+
+gcd(6, 44) = 2 ≠ 1, so Euler's theorem simply does not apply.
+6 has no inverse mod 44: 6x ≡ 1 (mod 44) would need 2 | 1.</div>
+    <p>The coprimality hypothesis isn't decoration. An element with a common factor with the modulus is never invertible, so no power of it can be 1.</p></div></details>
+  </div>
+</section>
+
+<section id="tech5">
+  <div class="sechead"><span class="num">05</span><h2>Ciphers, RSA, and geometric sums</h2></div>
+  <p class="lede">The HW 5 toolkit. The cipher problems are mechanical once you see the one trick; RSA is bookkeeping; the sums are one formula.</p>
+
+  <div class="alpha">
+  <table>
+    <tbody>
+      <tr><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td></tr>
+      <tr><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="tech">
+    <h4>Letterwise addition mod 26</h4>
+    <p class="when">Encode: <span class="f">c<sub>i</sub> = m<sub>i</sub> + k<sub>i</sub> (mod 26)</span>. Decode: <span class="f">m<sub>i</sub> = c<sub>i</sub> − k<sub>i</sub> (mod 26)</span>. Recover a key: <span class="f">k<sub>i</sub> = c<sub>i</sub> − m<sub>i</sub> (mod 26)</span>. Three variants of the same subtraction.</p>
+    <p class="when"><b>Caesar / shift cipher:</b> the key is one letter repeated, so a single shift. Brute force is 25 tries. <b>Vigenère:</b> the key is a short word repeated to length. <b>One-time pad:</b> the key is as long as the message and random, which is unbreakable — <i>unless the key is reused</i>.</p>
+    <div class="trap"><b>Where it goes wrong</b>Arithmetic drift across six letters. Write the two number rows under each other and add columnwise, reducing as you go. Then re-encrypt your answer as a check — it costs one line and catches everything.</div>
+  </div>
+
+  <div class="tech">
+    <h4>The key-reuse trick</h4>
+    <p class="when">This is the one real idea in the HW 5 graded problems. If two messages are encrypted with the <b>same</b> key, subtract the ciphertexts:</p>
+    <div class="calc">c₁ = m₁ + k        c₂ = m₂ + k
+c₁ − c₂ = (m₁ + k) − (m₂ + k) = <b>m₁ − m₂</b>   — the key cancels entirely</div>
+    <p class="when">So even a perfectly random key leaks the <i>difference</i> of the plaintexts. Given a candidate list, compute <span class="f">c₁ − c₂</span> once, then compute <span class="f">m − m′</span> for ordered pairs from the list until one matches. Recover the key afterward from either message.</p>
+    <p class="when">If instead the key is <b>nonrandom</b> — a word — you attack it differently: subtract each candidate plaintext from the ciphertext and look for the key that spells something.</p>
+  </div>
+
+  <div class="tech">
+    <h4>RSA</h4>
+    <p class="when">Setup, in order:</p>
+    <ul class="parts">
+      <li>Pick distinct primes <span class="v">p, q</span>. Set <span class="f">n = pq</span>.</li>
+      <li>Compute <span class="f">φ(n) = (p−1)(q−1)</span>.</li>
+      <li>Pick <span class="v">e</span> with <span class="f">gcd(e, φ(n)) = 1</span>.</li>
+      <li>Compute <span class="f">d ≡ e⁻¹ (mod φ(n))</span> by Euclid on <span class="v">e</span> and <span class="f">φ(n)</span>.</li>
+      <li>Encrypt: <span class="f">c = m<sup>e</sup> mod n</span>, for <span class="f">0 ≤ m &lt; n</span>. Decrypt: <span class="f">m = c<sup>d</sup> mod n</span>.</li>
+    </ul>
+    <p class="when"><b>Why it works:</b> <span class="f">ed ≡ 1 (mod φ(n))</span> means <span class="f">ed = 1 + tφ(n)</span>, so <span class="f">c<sup>d</sup> = m<sup>ed</sup> = m·(m<sup>φ(n)</sup>)<sup>t</sup> ≡ m·1<sup>t</sup> = m</span> by Euler's theorem. That is the entire reason HW 4 came before HW 5.</p>
+    <div class="trap"><b>Where it goes wrong</b>Inverting <span class="v">e</span> modulo <span class="v">n</span> instead of modulo <span class="f">φ(n)</span>. The modulus for the inverse is always <span class="f">φ(n)</span>; the modulus for the exponentiation is always <span class="v">n</span>. Also: the message bound is <span class="f">m &lt; n</span>, so the largest usable <span class="v">m</span> is <span class="f">n − 1</span>.</div>
+  </div>
+
+  <div class="tech">
+    <h4>Geometric series</h4>
+    <div class="calc">Σ(k=0..n) r^k     = (r^(n+1) − 1)/(r − 1)
+Σ(k=m..n) r^k     = (r^(n+1) − r^m)/(r − 1)        ← the one to memorize
+Σ(k=m..n) a·r^k   = a·(r^(n+1) − r^m)/(r − 1)
+
+special case r = 2:  Σ(k=m..n) 2^k = 2^(n+1) − 2^m</div>
+    <p class="when">For a sum of two geometric pieces, split by linearity and do each separately. For a sum like <span class="f">Σ x<sup>3k</sup></span>, substitute <span class="f">y = x³</span> and it is an ordinary geometric series in <span class="v">y</span>.</p>
+    <div class="trap"><b>Where it goes wrong</b>Off-by-one in the numerator. The top term is <span class="f">r<sup>n+1</sup></span>, one past the last index, and the bottom is <span class="f">r<sup>m</sup></span>, the first index itself. Sanity-check with a tiny case: <span class="f">Σ<sub>k=1..2</sub>3<sup>k</sup> = 12</span>, and the formula gives <span class="f">(27 − 3)/2 = 12</span> ✓. Also note the formula needs <span class="f">r ≠ 1</span>.</div>
+  </div>
+</section>
+
+<section id="hw5">
+  <div class="sechead"><span class="num">06</span><h2>HW 5, worked</h2></div>
+  <div class="controls"><button type="button" data-scope="#hw5" data-act="open">Show all</button><button type="button" data-scope="#hw5" data-act="close">Hide all</button></div>
+
+  <div class="prob">
+    <span class="tag">AB 5a · suggested</span>
+    <p>Encode SPHERE by adding the random key FDGHUZ letterwise mod 26.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">S  P  H  E  R  E      18 15  7  4 17  4
+F  D  G  H  U  Z   +   5  3  6  7 20 25
+                      ─────────────────────
+                      23 18 13 11 37 29
+                mod 26 23 18 13 11 11  3
+                       X  S  N  L  L  D
+
+<b>XSNLLD</b></div></div></details>
+  </div>
+
+  <div class="prob">
+    <span class="tag">AB 5b · suggested</span>
+    <p>LURJIZX was encoded by letterwise addition mod 26 with key XSYJCLK. Find the original message.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">L  U  R  J  I  Z  X     11 20 17  9  8 25 23
+X  S  Y  J  C  L  K  −  23 18 24  9  2 11 10
+                       ────────────────────────
+                       −12  2 −7  0  6 14 13
+                 mod 26 14  2 19  0  6 14 13
+                        O  C  T  A  G  O  N
+
+<b>OCTAGON</b></div></div></details>
+  </div>
+
+  <div class="prob">
+    <span class="tag">AB 5c · suggested</span>
+    <p>Pick two three-digit primes <span class="v">p, q</span>. Find <span class="v">e</span> and <span class="v">d</span>, each at least two digits, with <span class="f">(m<sup>e</sup> mod pq)<sup>d</sup> mod pq = m</span> for all <span class="f">0 ≤ m &lt; pq</span>. Check with <span class="f">m = 32</span>.</p>
+    <details><summary>Solution</summary><div class="body">
+      <p>Any valid choice works; here is one worked end to end with <span class="f">p = 211</span>, <span class="f">q = 223</span>.</p>
+      <div class="calc">n   = 211·223 = 47,053
+φ(n) = 210·222 = 46,620
+
+pick e = 17.  Check gcd(17, 46620):
+  46620 = 2742·17 + 6,   17 = 2·6 + 5,   6 = 1·5 + 1   → gcd 1 ✓
+
+d = 17⁻¹ mod 46620 = <b>38,393</b>      check: 17·38393 = 652,681 = 14·46620 + 1 ✓
+
+verification with m = 32:
+  32^17 mod 47053 = 36,613
+  36613^38393 mod 47053 = <b>32</b> ✓</div>
+      <p>Both <span class="v">e</span> and <span class="v">d</span> have at least two digits, as required. The one thing to get right by hand is <span class="v">d</span>: run Euclid on <span class="f">(e, φ(n))</span>, back-substitute, and reduce the coefficient of <span class="v">e</span> modulo <span class="f">φ(n)</span>.</p>
+    </div></details>
+  </div>
+
+  <div class="prob">
+    <span class="tag">AB 5.1</span>
+    <ol class="parts" type="a">
+      <li>JCDTAE was encrypted by adding a nonrandom key mod 26. The original is one of DIVIDE, ELEVEN, OBTUSE, RADIAN, SECANT. Which word, and what key?</li>
+      <li>ISXDKN and TESCDA were encrypted with the same completely random key. Each original is one of CIRCLE, COSINE, EIGHTY, NUMBER, VECTOR. Which is which, and what is the key?</li>
+    </ol>
+    <details><summary>Solution</summary><div class="body">
+      <p><b>(a)</b> “Nonrandom” means the key is itself a recognizable word. So subtract each candidate from the ciphertext and see which key spells something.</p>
+      <div class="calc">JCDTAE = 9 2 3 19 0 4
+
+  − DIVIDE ( 3  8 21  8  3  4) → ( 6 20  8 11 23  0) = GUILXA
+  − ELEVEN ( 4 11  4 21  4 13) → ( 5 17 25 24 22 17) = FRZYWR
+  − OBTUSE (14  1 19 20 18  4) → (21  1 10 25  8  0) = VBKZIA
+  − RADIAN (17  0  3  8  0 13) → (18  2  0 11  0 17) = <b>SCALAR</b>  ←
+  − SECANT (18  4  2  0 13 19) → (17 24  1 19 13 11) = RYBTNL
+
+message = <b>RADIAN</b>,  key = <b>SCALAR</b>
+
+re-encrypt to confirm: R+S=17+18=35≡9=J, A+C=2=C, D+A=3=D,
+                       I+L=19=T, A+A=0=A, N+R=30≡4=E   → JCDTAE ✓</div>
+      <p><b>(b)</b> The key is random, so no single message can be attacked. But it is <i>reused</i>, so subtract the two ciphertexts and the key cancels.</p>
+      <div class="calc">c₁ = ISXDKN =  8 18 23  3 10 13
+c₂ = TESCDA = 19  4 18  2  3  0
+c₁ − c₂     = 15 14  5  1  7 13  (= POFBHN as letters)
+
+now this must equal m₁ − m₂. Scan ordered pairs from the list;
+only one matches:
+
+  CIRCLE − NUMBER = (2−13, 8−20, 17−12, 2−1, 11−4, 4−17)
+                  = (−11, −12, 5, 1, 7, −13)
+            mod 26 = (15, 14, 5, 1, 7, 13) ✓
+
+so m₁ = <b>CIRCLE</b>,  m₂ = <b>NUMBER</b>
+
+key = c₁ − m₁ = (8−2, 18−8, 23−17, 3−2, 10−11, 13−4)
+              = (6, 10, 6, 1, −1, 9) mod 26 = (6,10,6,1,25,9) = <b>GKGBZJ</b>
+
+check on the second message:
+  NUMBER + GKGBZJ = (19, 4, 18, 2, 3, 0) = TESCDA ✓</div>
+      <p>This pair is the only one of the twenty ordered pairs that works, so the answer is forced — which is the point of the exercise. Reusing a one-time pad destroys it.</p>
+    </div></details>
+  </div>
+
+  <div class="prob">
+    <span class="tag">AB 5.2</span>
+    <p>With <span class="f">p = 599</span>, <span class="f">q = 877</span>, <span class="f">e = 17</span>, write the RSA instructions in the form “to send me the secret number <span class="v">m</span> between 0 and <span class="v">X</span>, compute <span class="f">c = Y mod Z</span> and send me <span class="v">c</span>,” and “if I receive <span class="v">c</span>, I can find <span class="v">m</span> by computing <span class="f">m = W</span>.” Find <span class="v">X, Y, Z, W</span>.</p>
+    <details><summary>Solution</summary><div class="body">
+      <div class="calc">n    = 599 · 877 = <b>525,323</b>
+φ(n) = 598 · 876 = <b>523,848</b>
+
+d = 17⁻¹ mod 523848, by Euclid:
+  523848 = 30814·17 + 10
+      17 =     1·10 +  7
+      10 =     1· 7 +  3
+       7 =     2· 3 +  1
+
+  1 = 7 − 2·3
+    = 7 − 2(10 − 7)            = 3·7 − 2·10
+    = 3(17 − 10) − 2·10        = 3·17 − 5·10
+    = 3·17 − 5(523848 − 30814·17)
+    = 17·(3 + 154070) − 5·523848
+    = 17·154073 − 5·523848
+
+  d = <b>154,073</b>     check: 17·154073 = 2,619,241 = 5·523,848 + 1 ✓</div>
+      <p>So the four quantities are:</p>
+      <div class="tw">
+      <table>
+        <tbody>
+          <tr><td class="m">X</td><td class="m">525,322</td><td>the largest allowed <span class="v">m</span>, since we need <span class="f">0 ≤ m &lt; n</span></td></tr>
+          <tr><td class="m">Y</td><td class="m">m<sup>17</sup></td><td>the plaintext raised to <span class="v">e</span></td></tr>
+          <tr><td class="m">Z</td><td class="m">525,323</td><td>the modulus <span class="f">n = pq</span></td></tr>
+          <tr><td class="m">W</td><td class="m">c<sup>154073</sup> mod 525323</td><td>the ciphertext raised to <span class="v">d</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p>Written out: <i>“To send me the secret number <span class="v">m</span> between 0 and 525,322, compute <span class="f">c = m<sup>17</sup> mod 525,323</span> and send me <span class="v">c</span>.”</i> and <i>“If I receive <span class="v">c</span>, I can find <span class="v">m</span> by computing <span class="f">m = c<sup>154073</sup> mod 525,323</span>.”</i></p>
+      <div class="calc">spot check with m = 12,345:
+  12345^17 mod 525323 = 244,673
+  244673^154073 mod 525323 = <b>12,345</b> ✓</div>
+      <p>The five-digit-message remark in the problem is just a reassurance that any five-digit number is below 525,323 and therefore safe to send.</p>
+    </div></details>
+  </div>
+
+  <div class="prob">
+    <span class="tag">AB 5.3</span>
+    <ol class="parts" type="a">
+      <li>Compute <span class="f">Σ<sub>k=3..12</sub> (7·3<sup>k</sup> − 5·2<sup>k</sup>)</span>.</li>
+      <li>Compute <span class="f">Σ<sub>k=2..9</sub> x<sup>3k</sup></span>, simplified as far as possible.</li>
+    </ol>
+    <details><summary>Solution</summary><div class="body">
+      <p><b>(a)</b> Split by linearity and apply the range formula to each piece.</p>
+      <div class="calc">Σ(k=3..12) 3^k = (3¹³ − 3³)/(3 − 1) = (1,594,323 − 27)/2 = 797,148
+Σ(k=3..12) 2^k = (2¹³ − 2³)/(2 − 1) = 8,192 − 8     =   8,184
+
+7·797,148 − 5·8,184 = 5,580,036 − 40,920 = <b>5,539,116</b></div>
+      <p><b>(b)</b> The hint points at the substitution. Let <span class="f">y = x³</span>; then <span class="f">x<sup>3k</sup> = y<sup>k</sup></span> and this is an ordinary geometric series.</p>
+      <div class="calc">Σ(k=2..9) y^k = (y¹⁰ − y²)/(y − 1)
+
+substitute back y = x³:
+
+  Σ(k=2..9) x^(3k) = <b>(x³⁰ − x⁶)/(x³ − 1)</b>   for x³ ≠ 1
+
+               = x⁶(x²⁴ − 1)/(x³ − 1)        equivalent factored form
+
+If x³ = 1 the formula is undefined and the sum is simply 8.</div>
+      <p>Check at <span class="f">x = 2</span>: the sum is 153,391,680, and <span class="f">(2³⁰ − 2⁶)/7 = (1,073,741,824 − 64)/7 = 153,391,680</span> ✓.</p>
+    </div></details>
+  </div>
+</section>
+
+<section id="setE">
+  <div class="sechead"><span class="num">07</span><h2>Practice set E</h2></div>
+  <p class="lede">Reconstructed from MCS 9.82, 9.83, 9.88 and 14.6a, plus the Junghenn cipher sections — the HW 5 suggested territory.</p>
+  <div class="controls"><button type="button" data-scope="#setE" data-act="open">Show all</button><button type="button" data-scope="#setE" data-act="close">Hide all</button></div>
+
+  <div class="prob practice"><span class="tag">E1 · shift cipher</span>
+    <p>WKHRUHP was encrypted with a Caesar shift. Recover the message and the shift.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">try shifts until the plaintext is English. Shift 3 back:
+
+W  K  H  R  U  H  P     22 10  7 17 20  7 15
+            − 3 each  ─────────────────────────
+                        19  7  4 14 17  4 12
+                         T  H  E  O  R  E  M
+
+message = <b>THEOREM</b>, shift = <b>3</b></div>
+    <p>Only 25 shifts exist, so brute force always finishes. Start with the shortest word or the most common letter.</p></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">E2 · Vigenère</span>
+    <p>Encrypt VECTOR with the repeating key MATH.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">extend the key to length 6:  M A T H M A
+
+V  E  C  T  O  R     21  4  2 19 14 17
+M  A  T  H  M  A  +  12  0 19  7 12  0
+                    ─────────────────────
+                     33  4 21 26 26 17
+              mod 26  7  4 21  0  0 17
+                      H  E  V  A  A  R
+
+<b>HEVAAR</b></div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">E3 · key reuse</span>
+    <p>CKIG and WYAC were encrypted with the same random key mod 26. Each plaintext is one of BLUE, GOLD, MATH, RING. Identify both messages and the key.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">c₁ − c₂ = (2−22, 10−24, 8−0, 6−2) = (−20, −14, 8, 4)
+                            mod 26 = (6, 12, 8, 4)
+
+search ordered pairs for m₁ − m₂ = (6, 12, 8, 4):
+
+  MATH − GOLD = (12−6, 0−14, 19−11, 7−3)
+              = (6, −14, 8, 4) mod 26 = (6, 12, 8, 4) ✓   unique
+
+m₁ = <b>MATH</b>,  m₂ = <b>GOLD</b>
+
+key = c₁ − m₁ = (2−12, 10−0, 8−19, 6−7) = (−10, 10, −11, −1)
+                                  mod 26 = (16, 10, 15, 25) = <b>QKPZ</b>
+
+check: GOLD + QKPZ = (6+16, 14+10, 11+15, 3+25)
+                   = (22, 24, 26, 28) mod 26 = (22, 24, 0, 2) = WYAC ✓</div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">E4 · small RSA</span>
+    <p>With <span class="f">p = 11</span>, <span class="f">q = 13</span>, <span class="f">e = 7</span>: find <span class="v">n</span>, <span class="f">φ(n)</span> and <span class="v">d</span>, then encrypt <span class="f">m = 9</span> and decrypt your answer.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">n = 143,  φ(n) = 10·12 = 120
+
+d = 7⁻¹ mod 120:  7·103 = 721 = 6·120 + 1  →  d = <b>103</b>
+
+encrypt:  9⁷ mod 143
+  9² = 81
+  9⁴ ≡ 81² = 6561 = 45·143 + 126  ≡ 126
+  9⁶ = 9⁴·9² ≡ 126·81 = 10206 = 71·143 + 53  ≡ 53
+  9⁷ ≡ 53·9 = 477 = 3·143 + 48  ≡ <b>48</b>
+
+decrypt:  48^103 mod 143 = <b>9</b> ✓</div>
+    <p>Repeated squaring keeps the intermediate numbers small enough for a non-graphing calculator — which is exactly the constraint on the exam.</p></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">E5 · geometric sum</span>
+    <p>Compute <span class="f">Σ<sub>k=4..11</sub> (3·5<sup>k</sup> − 2·4<sup>k</sup>)</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">Σ(k=4..11) 5^k = (5¹² − 5⁴)/4 = (244,140,625 − 625)/4 = 61,035,000
+Σ(k=4..11) 4^k = (4¹² − 4⁴)/3 = (16,777,216 − 256)/3  =  5,592,320
+
+3·61,035,000 − 2·5,592,320 = 183,105,000 − 11,184,640 = <b>171,920,360</b></div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">E6 · substitution in a sum</span>
+    <p>Simplify <span class="f">Σ<sub>k=1..6</sub> x<sup>2k</sup></span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">let y = x²:   Σ(k=1..6) y^k = (y⁷ − y)/(y − 1)
+
+back-substitute:  <b>(x¹⁴ − x²)/(x² − 1)</b>   for x² ≠ 1
+                = x²(x¹² − 1)/(x² − 1)
+
+check at x = 2: sum = 4+16+64+256+1024+4096 = 5460
+                formula = (16384 − 4)/3 = 16380/3 = 5460 ✓</div></div></details>
+  </div>
+</section>
+
+<section id="tech6">
+  <div class="sechead"><span class="num">08</span><h2>Recurrences</h2></div>
+  <p class="lede">The HW 6 toolkit. Two distinct skills: building a recurrence from a counting story, and solving one you're handed.</p>
+
+  <div class="tech">
+    <h4>Building a recurrence: condition on the last choice</h4>
+    <p class="when">To count objects of size <span class="v">n</span>, ask what the <b>final structural decision</b> can be, split into disjoint cases by that decision, and express each case as a smaller instance of the same problem.</p>
+    <div class="calc">Tiling a 1×n strip with 1×1 tiles in 5 colors and 1×2 tiles in 4 colors:
+
+  the LAST tile is either 1×1 (5 color choices, leaving a 1×(n−1) strip)
+                       or 1×2 (4 color choices, leaving a 1×(n−2) strip)
+
+  a_n = 5·a_(n−1) + 4·a_(n−2),    a₀ = 1 (empty tiling), a₁ = 5</div>
+    <p class="when"><b>Initial conditions.</b> A linear recurrence of depth 2 needs two of them, and <span class="f">a₀ = 1</span> is almost always right: there is exactly one way to do nothing. Compute <span class="f">a₂</span> both by the recurrence and by hand to confirm your setup before going further.</p>
+    <p class="when"><b>The Catalan pattern</b> looks different and shows up whenever a structure splits into two independent sub-structures. For balanced brackets, match the opening bracket with its partner; everything inside and everything after are independent smaller instances:</p>
+    <div class="calc">C_n = Σ(k=0..n−1) C_k · C_(n−1−k),     C₀ = 1
+
+  1, 1, 2, 5, 14, 42, 132, 429, …</div>
+    <div class="trap"><b>Where it goes wrong</b>Double counting, which happens when the cases overlap. The decomposition must be <i>unique</i> for each object: every balanced string has exactly one first-bracket partner, so the Catalan split is unambiguous. If two cases could describe the same object, the recurrence is wrong.</div>
+  </div>
+
+  <div class="tech">
+    <h4>Solving a linear homogeneous constant-coefficient recurrence</h4>
+    <p class="when">For <span class="f">a<sub>n</sub> = c₁a<sub>n−1</sub> + c₂a<sub>n−2</sub></span>, guess <span class="f">a<sub>n</sub> = r<sup>n</sup></span>, substitute, and divide by <span class="f">r<sup>n−2</sup></span>:</p>
+    <div class="calc">characteristic equation:   r² = c₁r + c₂,  i.e.  r² − c₁r − c₂ = 0
+
+TWO DISTINCT ROOTS r₁ ≠ r₂:    a_n = A·r₁^n + B·r₂^n
+ONE REPEATED ROOT r:           a_n = (A + Bn)·r^n
+
+then solve for A and B using the two initial conditions.</div>
+    <p class="when"><b>The procedure, every time:</b> write the characteristic equation, factor it, write the general form, plug in <span class="f">n = 0</span> and <span class="f">n = 1</span> to get two linear equations, solve, and verify against a value you computed from the recurrence directly.</p>
+    <p class="when">Be careful transcribing the signs. <span class="f">c<sub>n+2</sub> + 8c<sub>n+1</sub> + 16c<sub>n</sub> = 0</span> is already in standard form: its characteristic equation is <span class="f">r² + 8r + 16 = 0</span>, read straight off the coefficients. But <span class="f">b<sub>n</sub> = 3b<sub>n−1</sub> + 40b<sub>n−2</sub></span> must be rearranged first, to <span class="f">r² − 3r − 40 = 0</span>.</p>
+    <div class="trap"><b>Where it goes wrong</b>Expecting integer constants. <span class="v">A</span> and <span class="v">B</span> are frequently fractions — AB 6.2 gives <span class="f">23/13</span> and <span class="f">29/13</span>, and AB 6.3 gives <span class="f">−27/4</span>. A fraction is not a sign you made a mistake; verify against a computed term instead of second-guessing.</div>
+  </div>
+
+  <div class="tech">
+    <h4>Why the repeated-root form has that extra <span class="v">n</span></h4>
+    <p class="when">With a double root you only get <i>one</i> solution <span class="f">r<sup>n</sup></span> from the guess, but a depth-2 recurrence has a two-dimensional solution space, so you need a second independent solution. It turns out <span class="f">n·r<sup>n</sup></span> works. Quick confirmation on <span class="f">a<sub>n</sub> = 6a<sub>n−1</sub> − 9a<sub>n−2</sub></span>, whose root is 3 twice:</p>
+    <div class="calc">try a_n = n·3^n:
+  6·(n−1)3^(n−1) − 9·(n−2)3^(n−2)
+    = 3^(n−2)[ 18(n−1) − 9(n−2) ]
+    = 3^(n−2)[ 18n − 18 − 9n + 18 ]
+    = 3^(n−2)·9n = n·3^n ✓</div>
+    <p class="when">So the general solution is any combination <span class="f">(A + Bn)3<sup>n</sup></span>, and the two initial conditions pin down <span class="v">A</span> and <span class="v">B</span>.</p>
+  </div>
+</section>
+
+<section id="hw6">
+  <div class="sechead"><span class="num">09</span><h2>HW 6, worked</h2></div>
+  <div class="controls"><button type="button" data-scope="#hw6" data-act="open">Show all</button><button type="button" data-scope="#hw6" data-act="close">Hide all</button></div>
+
+  <div class="prob">
+    <span class="tag">AB 6a · suggested</span>
+    <p><span class="f">a<sub>n</sub></span> is the number of ways to tile a <span class="f">1×n</span> rectangle using <span class="f">1×1</span> tiles in 5 colors and <span class="f">1×2</span> tiles in 4 colors. Find a recurrence and <span class="f">a₀, a₁</span>, then find <span class="f">a₅</span>.</p>
+    <details><summary>Solution</summary><div class="body">
+      <p>Condition on the last tile. It covers either the final cell alone (5 colors, leaving <span class="f">1×(n−1)</span>) or the final two cells (4 colors, leaving <span class="f">1×(n−2)</span>). The two cases are disjoint and exhaustive.</p>
+      <div class="calc">a_n = 5·a_(n−1) + 4·a_(n−2)        a₀ = 1,  a₁ = 5
+
+a₂ = 5·5  + 4·1   =  25 +  20 =    29
+a₃ = 5·29 + 4·5   = 145 +  20 =   165
+a₄ = 5·165 + 4·29 = 825 + 116 =   941
+a₅ = 5·941 + 4·165 = 4705 + 660 = <b>5,365</b></div>
+      <p>Sanity check on <span class="f">a₂ = 29</span> directly: two <span class="f">1×1</span> tiles gives <span class="f">5·5 = 25</span> colorings, one <span class="f">1×2</span> tile gives 4, total 29 ✓.</p>
+    </div></details>
+  </div>
+
+  <div class="prob">
+    <span class="tag">AB 6b · suggested</span>
+    <p><span class="f">C₀ = 1</span> and <span class="f">C<sub>n</sub> = Σ<sub>k=0..n−1</sub> C<sub>k</sub>C<sub>n−k−1</sub></span>. Find <span class="f">C₆</span>, showing work for <span class="f">C₅</span> and <span class="f">C₆</span>.</p>
+    <details><summary>Solution</summary><div class="body">
+      <div class="calc">from class:  C₀ = 1,  C₁ = 1,  C₂ = 2,  C₃ = 5,  C₄ = 14
+
+C₅ = C₀C₄ + C₁C₃ + C₂C₂ + C₃C₁ + C₄C₀
+   = 1·14 + 1·5 + 2·2 + 5·1 + 14·1
+   =   14 +   5 +   4 +   5 +   14  =  <b>42</b>
+
+C₆ = C₀C₅ + C₁C₄ + C₂C₃ + C₃C₂ + C₄C₁ + C₅C₀
+   = 1·42 + 1·14 + 2·5 + 5·2 + 14·1 + 42·1
+   =   42 +   14 +  10 +  10 +   14 +   42  = <b>132</b></div>
+      <p>The sum is symmetric, which halves the work and gives a free check: the terms should read the same forwards and backwards.</p>
+    </div></details>
+  </div>
+
+  <div class="prob">
+    <span class="tag">AB 6.1</span>
+    <p><span class="f">Q<sub>n</sub></span> counts properly matched strings of length <span class="f">2n</span> over the four characters <span class="f">(</span>, <span class="f">)</span>, <span class="f">[</span>, <span class="f">]</span> — both bracket types balanced and correctly nested. Find <span class="f">Q₀, Q₁, Q₂</span> and a recurrence relating <span class="f">Q<sub>n</sub></span> to <span class="f">Q₀, …, Q<sub>n−1</sub></span>.</p>
+    <details><summary>Solution</summary><div class="body">
+      <p><b>The decomposition.</b> Take a nonempty properly matched string <span class="v">w</span> of length <span class="f">2n</span>. Its first character is an opening bracket, of one of <b>2 kinds</b>. That bracket has a unique matching partner, which splits the rest of the string in two:</p>
+      <div class="calc">w = ( u ) v     or     w = [ u ] v
+
+where u and v are themselves properly matched, and if u has length 2k
+then v has length 2(n − 1 − k).</div>
+      <p>The split is unique for each <span class="v">w</span> — the matching partner of the first bracket is determined — so there is no double counting. Summing over <span class="v">k</span> and over the 2 bracket kinds:</p>
+      <div class="calc">Q_n = 2 · Σ(k=0..n−1) Q_k · Q_(n−1−k)        for n ≥ 1,  with Q₀ = 1
+
+Q₀ = <b>1</b>          the empty string
+Q₁ = 2·(Q₀Q₀) = 2·1 = <b>2</b>        the strings  ()  and  []
+Q₂ = 2·(Q₀Q₁ + Q₁Q₀) = 2·(2 + 2) = <b>8</b></div>
+      <p><b>Confirming <span class="f">Q₂ = 8</span> by listing.</b> The length-4 strings are</p>
+      <div class="calc">(())   ([])   ()()   ()[]
+[[]]   [()]   []()   [][]     →  8 strings ✓</div>
+      <p>Comparing with the Catalan recurrence shows the relationship cleanly: <span class="f">Q<sub>n</sub> = 2<sup>n</sup>C<sub>n</sub></span> — pick the Catalan nesting shape, then independently choose a bracket kind for each of the <span class="v">n</span> pairs. That gives <span class="f">Q₃ = 8·5 = 40</span> and <span class="f">Q₄ = 16·14 = 224</span>, which is a good check if you have time, though the problem only asks through <span class="f">Q₂</span>.</p>
+    </div></details>
+  </div>
+
+  <div class="prob">
+    <span class="tag">AB 6.2</span>
+    <p><span class="f">b<sub>n</sub> = 3b<sub>n−1</sub> + 40b<sub>n−2</sub></span> with <span class="f">b₀ = 4</span>, <span class="f">b₁ = 3</span>. (a) Find <span class="f">b₂</span> through <span class="f">b₅</span>. (b) Find a closed form. (c) Does it give the right <span class="f">b₅</span>?</p>
+    <details><summary>Solution</summary><div class="body">
+      <p><b>(a)</b></p>
+      <div class="calc">b₂ = 3·3    + 40·4   =     9 +   160 =    <b>169</b>
+b₃ = 3·169  + 40·3   =   507 +   120 =    <b>627</b>
+b₄ = 3·627  + 40·169 = 1,881 + 6,760 =  <b>8,641</b>
+b₅ = 3·8641 + 40·627 = 25,923 + 25,080 = <b>51,003</b></div>
+      <p><b>(b)</b> Rearrange into standard form first, then write the characteristic equation.</p>
+      <div class="calc">b_n − 3b_(n−1) − 40b_(n−2) = 0   →   r² − 3r − 40 = 0
+
+(r − 8)(r + 5) = 0   →   r = 8, −5    (distinct)
+
+b_n = A·8^n + B·(−5)^n
+
+n = 0:   A +  B = 4
+n = 1:  8A − 5B = 3
+
+from A = 4 − B:   8(4 − B) − 5B = 3  →  32 − 13B = 3  →  B = 29/13
+                  A = 4 − 29/13 = 23/13
+
+b_n = (23·8^n + 29·(−5)^n) / 13</div>
+      <p><b>(c)</b></p>
+      <div class="calc">b₅ = (23·8⁵ + 29·(−5)⁵)/13
+   = (23·32,768 + 29·(−3,125))/13
+   = (753,664 − 90,625)/13
+   = 663,039/13 = <b>51,003</b> ✓   matches part (a)</div>
+      <p>The thirteenths are correct, not an error. They cancel for every <span class="v">n</span> because the sequence is integer-valued, but the individual constants need not be integers.</p>
+    </div></details>
+  </div>
+
+  <div class="prob">
+    <span class="tag">AB 6.3</span>
+    <p>Solve <span class="f">c<sub>n+2</sub> + 8c<sub>n+1</sub> + 16c<sub>n</sub> = 0</span> with <span class="f">c₀ = 5</span>, <span class="f">c₁ = 7</span>.</p>
+    <details><summary>Solution</summary><div class="body">
+      <div class="calc">already in standard form, so read off the characteristic equation:
+
+  r² + 8r + 16 = 0   →   (r + 4)² = 0   →   r = −4, REPEATED
+
+so the general solution carries the extra factor of n:
+
+  c_n = (A + Bn)·(−4)^n
+
+n = 0:  A = 5
+n = 1:  (5 + B)(−4) = 7   →   5 + B = −7/4   →   B = −27/4
+
+  c_n = (5 − (27/4)n)·(−4)^n  =  <b>(20 − 27n)·(−4)^n / 4</b></div>
+      <p>Verify against values from the recurrence itself:</p>
+      <div class="calc">from the recurrence:  c₂ = −8·7 − 16·5 = −56 − 80 = −136
+from the formula:     (20 − 54)(16)/4 = (−34)(16)/4 = <b>−136</b> ✓
+
+  c₃: recurrence −8(−136) − 16(7) = 1088 − 112 = 976
+      formula (20 − 81)(−64)/4 = (−61)(−64)/4 = <b>976</b> ✓</div>
+      <p>Two things to catch here. The repeated root means you <i>must</i> use <span class="f">(A + Bn)r<sup>n</sup></span> — plain <span class="f">A(−4)<sup>n</sup> + B(−4)<sup>n</sup></span> collapses to one constant and cannot satisfy both initial conditions. And the root is negative, so the terms alternate in sign.</p>
+    </div></details>
+  </div>
+</section>
+
+<section id="setF">
+  <div class="sechead"><span class="num">10</span><h2>Practice set F</h2></div>
+  <p class="lede">Reconstructed from Levin 4.1.7.12–16, 4.4.5.4–6 and 4.4.6.6–7 — the HW 6 suggested problems.</p>
+  <div class="controls"><button type="button" data-scope="#setF" data-act="open">Show all</button><button type="button" data-scope="#setF" data-act="close">Hide all</button></div>
+
+  <div class="prob practice"><span class="tag">F1 · building a recurrence</span>
+    <p>Let <span class="f">a<sub>n</sub></span> count binary strings of length <span class="v">n</span> with no two consecutive 1's. Find a recurrence with initial conditions, and compute <span class="f">a₆</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">condition on the last character:
+  ends in 0 → the first n−1 characters are any valid string: a_(n−1)
+  ends in 1 → the previous character must be 0, and the first n−2
+              are any valid string: a_(n−2)
+
+  a_n = a_(n−1) + a_(n−2),    a₀ = 1, a₁ = 2
+
+  1, 2, 3, 5, 8, 13, 21   →   a₆ = <b>21</b></div>
+    <p>Shifted Fibonacci. Verified by direct enumeration for <span class="f">n ≤ 6</span>.</p></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">F2 · colored tilings</span>
+    <p>Tile a <span class="f">1×n</span> strip with <span class="f">1×1</span> tiles in 3 colors and <span class="f">1×2</span> tiles in 2 colors. Find a recurrence and <span class="f">t₄</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">t_n = 3t_(n−1) + 2t_(n−2),    t₀ = 1, t₁ = 3
+
+t₂ = 9 + 2       =  11
+t₃ = 33 + 6      =  39
+t₄ = 117 + 22    = <b>139</b></div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">F3 · distinct roots</span>
+    <p>Solve <span class="f">a<sub>n</sub> = 5a<sub>n−1</sub> − 6a<sub>n−2</sub></span> with <span class="f">a₀ = 1</span>, <span class="f">a₁ = 4</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">r² − 5r + 6 = 0  →  (r − 2)(r − 3) = 0  →  r = 2, 3
+
+a_n = A·2^n + B·3^n
+  A + B = 1
+  2A + 3B = 4   →   B = 2,  A = −1
+
+a_n = <b>2·3^n − 2^n</b>
+
+check a₂: recurrence 5·4 − 6·1 = 14;  formula 18 − 4 = 14 ✓</div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">F4 · repeated root</span>
+    <p>Solve <span class="f">a<sub>n</sub> = 6a<sub>n−1</sub> − 9a<sub>n−2</sub></span> with <span class="f">a₀ = 2</span>, <span class="f">a₁ = 3</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">r² − 6r + 9 = 0  →  (r − 3)² = 0  →  r = 3 repeated
+
+a_n = (A + Bn)·3^n
+  n=0:  A = 2
+  n=1:  (2 + B)·3 = 3  →  2 + B = 1  →  B = −1
+
+a_n = <b>(2 − n)·3^n</b>
+
+check a₂: recurrence 6·3 − 9·2 = 0;  formula (0)(9) = 0 ✓
+      a₃: recurrence 6·0 − 9·3 = −27;  formula (−1)(27) = −27 ✓</div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">F5 · fractional constants</span>
+    <p>Solve <span class="f">a<sub>n</sub> = a<sub>n−1</sub> + 6a<sub>n−2</sub></span> with <span class="f">a₀ = 3</span>, <span class="f">a₁ = 6</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">r² − r − 6 = 0  →  (r − 3)(r + 2) = 0  →  r = 3, −2
+
+a_n = A·3^n + B·(−2)^n
+  A + B = 3
+  3A − 2B = 6   →   9 − 3B − 2B = 6  →  B = 3/5,  A = 12/5
+
+a_n = <b>(12·3^n + 3·(−2)^n)/5</b>
+
+check a₂: recurrence 6 + 18 = 24;  formula (108 + 12)/5 = 24 ✓</div>
+    <p>Fifths that cancel — the same phenomenon as AB 6.2's thirteenths.</p></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">F6 · Catalan variant</span>
+    <p>Let <span class="f">s<sub>n</sub></span> count properly matched strings of length <span class="f">2n</span> with <b>three</b> kinds of brackets. Find the recurrence and <span class="f">s₂</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">same decomposition as AB 6.1, with 3 choices for the first bracket:
+
+  s_n = 3 · Σ(k=0..n−1) s_k · s_(n−1−k),     s₀ = 1
+
+s₁ = 3·1 = 3
+s₂ = 3·(s₀s₁ + s₁s₀) = 3·(3 + 3) = <b>18</b>
+
+in general s_n = 3^n · C_n:  1, 3, 18, 135, 1134, …</div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">F7 · iteration instead of roots</span>
+    <p>Solve <span class="f">a<sub>n</sub> = 2a<sub>n−1</sub> + 1</span> with <span class="f">a₀ = 0</span> by unrolling the recurrence.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">this one is not homogeneous, so the characteristic method doesn't
+apply directly. Unroll instead:
+
+a_n = 2a_(n−1) + 1
+    = 2(2a_(n−2) + 1) + 1 = 4a_(n−2) + 2 + 1
+    = 8a_(n−3) + 4 + 2 + 1
+    = ⋯
+    = 2^n·a₀ + (2^(n−1) + ⋯ + 2 + 1)
+    = 0 + Σ(k=0..n−1) 2^k
+    = <b>2^n − 1</b>        by the geometric sum
+
+check: 0, 1, 3, 7, 15, 31, 63 ✓</div>
+    <p>Worth having in your pocket: when the recurrence has an added constant, unrolling it turns the problem into a geometric series — which ties HW 5 and HW 6 together.</p></div></details>
+  </div>
+</section>
+
+<section id="mock">
+  <div class="sechead"><span class="num">11</span><h2>Mock exam</h2></div>
+  <p class="lede">Seven problems, proportioned across HW 4–6 the way she weights them. Do it closed-book with a finished index card.</p>
+  <div class="exam-meta">50 minutes · non-graphing calculator · one double-sided 3″×5″ card of notes<br>Show the setup. On AB 4.3 she wrote that an answer with no supporting computations receives no credit.</div>
+  <div class="controls"><button type="button" data-scope="#mock" data-act="open">Show all</button><button type="button" data-scope="#mock" data-act="close">Hide all</button></div>
+
+  <div class="prob practice"><span class="tag">N1 · 15 pts</span>
+    <p>Use Euclid's algorithm to find <span class="f">gcd(31, 45)</span> and integers <span class="v">m, n</span> with <span class="f">31m + 45n = gcd</span>. Then, given <span class="f">31x ≡ 8 (mod 45)</span>, find the largest <span class="v">n</span> for which you know <span class="f">x mod n</span>, and find it.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">45 = 1·31 + 14
+31 = 2·14 +  3
+14 = 4· 3 +  2
+ 3 = 1· 2 +  1
+ 2 = 2· 1 +  0      →  gcd = <b>1</b>
+
+ 1 = 3 − 2
+   = 3 − (14 − 4·3)        = 5·3 − 14
+   = 5(31 − 2·14) − 14     = 5·31 − 11·14
+   = 5·31 − 11(45 − 31)    = <b>16·31 − 11·45</b>
+
+m = 16, n = −11       check: 496 − 495 = 1 ✓
+
+gcd = 1 so the congruence is unique mod 45 → largest n = <b>45</b>
+31⁻¹ ≡ 16, so x ≡ 16·8 = 128 ≡ 128 − 90 = <b>38 (mod 45)</b>
+
+check: 31·38 = 1178 = 26·45 + 8 ✓</div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">N2 · 15 pts</span>
+    <p><span class="v">x</span> is an integer with <span class="f">x ≡ 7 (mod 20)</span> and <span class="f">x ≡ 13 (mod 27)</span>. Find the largest <span class="v">n</span> such that you know <span class="f">x mod n</span>, and find that value.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">gcd(20,27) = 1 → unique mod 540 = <b>540</b>
+
+x = 7 + 20k
+7 + 20k ≡ 13 (mod 27)  →  20k ≡ 6 (mod 27)
+
+20⁻¹ mod 27:  20·23 = 460 = 17·27 + 1  →  20⁻¹ ≡ 23
+k ≡ 23·6 = 138 ≡ 138 − 135 = 3 (mod 27)
+
+x = 7 + 60 = <b>67 (mod 540)</b>
+check: 67 = 3·20 + 7 ✓    67 = 2·27 + 13 ✓</div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">N3 · 20 pts</span>
+    <p>Find <span class="f">8<sup>2025</sup> mod 165</span>, showing all work. (<span class="f">165 = 3·5·11</span>.)</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">handle each prime factor with Fermat, then recombine.
+
+mod 3:   8 ≡ 2, and 2² ≡ 1, so reduce 2025 mod 2 = 1
+         8^2025 ≡ 2¹ ≡ 2 (mod 3)
+
+mod 5:   8 ≡ 3, and 3⁴ ≡ 1, so reduce 2025 mod 4 = 1
+         8^2025 ≡ 3¹ ≡ 3 (mod 5)
+
+mod 11:  8¹⁰ ≡ 1, so reduce 2025 mod 10 = 5
+         8² = 64 ≡ 9,  8⁴ ≡ 81 ≡ 4,  8⁵ ≡ 4·8 = 32 ≡ 10
+         8^2025 ≡ 10 (mod 11)
+
+CRT on x ≡ 2 (mod 3), x ≡ 3 (mod 5), x ≡ 10 (mod 11):
+  x = 2 + 3k;  2 + 3k ≡ 3 (mod 5) → 3k ≡ 1 → k ≡ 2 (mod 5)
+  x = 8 + 15j;  8 + 15j ≡ 10 (mod 11) → 4j ≡ 2 (mod 11) → j ≡ 6 (mod 11)
+  x = 8 + 90 = <b>98 (mod 165)</b>
+
+check: 98 mod 3 = 2 ✓   98 mod 5 = 3 ✓   98 mod 11 = 10 ✓</div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">N4 · 10 pts</span>
+    <p>HEVKWO was encrypted by adding a nonrandom key mod 26. The original is one of CIRCLE, MATRIX, NORMAL, SQUARE, VERTEX. Which word, and what key?</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">HEVKWO = 7 4 21 10 22 14;  subtract each candidate:
+
+  − CIRCLE → FWEILK
+  − MATRIX → <b>VECTOR</b>  ←  a word
+  − NORMAL → UQEYWD
+  − SQUARE → POBKFK
+  − VERTEX → MAERSR
+
+message = <b>MATRIX</b>,  key = <b>VECTOR</b>
+
+check: M+V = 12+21 = 33 ≡ 7 = H ✓,  A+E = 4 = E ✓,  T+C = 21 = V ✓,
+       R+T = 17+19 = 36 ≡ 10 = K ✓, I+O = 8+14 = 22 = W ✓,
+       X+R = 23+17 = 40 ≡ 14 = O ✓</div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">N5 · 15 pts</span>
+    <p>With <span class="f">p = 61</span>, <span class="f">q = 53</span>, <span class="f">e = 17</span>: give <span class="v">n</span>, <span class="f">φ(n)</span>, and <span class="v">d</span>, state the largest sendable <span class="v">m</span>, and encrypt <span class="f">m = 65</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">n    = 61·53 = <b>3,233</b>
+φ(n) = 60·52 = <b>3,120</b>
+largest sendable m = n − 1 = <b>3,232</b>
+
+d = 17⁻¹ mod 3120, by Euclid:
+  3120 = 183·17 + 9
+    17 =   1· 9 + 8
+     9 =   1· 8 + 1
+  1 = 9 − 8 = 9 − (17 − 9) = 2·9 − 17
+    = 2(3120 − 183·17) − 17 = 2·3120 − 367·17
+  so 17⁻¹ ≡ −367 ≡ 3120 − 367 = <b>2,753</b>
+  check: 17·2753 = 46,801 = 15·3120 + 1 ✓
+
+encrypt: c = 65^17 mod 3233 = <b>2,790</b>
+decrypt check: 2790^2753 mod 3233 = 65 ✓</div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">N6 · 10 pts</span>
+    <p>Compute <span class="f">Σ<sub>k=2..10</sub> (4·5<sup>k</sup> − 3·2<sup>k</sup>)</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">Σ(k=2..10) 5^k = (5¹¹ − 5²)/4 = (48,828,125 − 25)/4 = 12,207,025
+Σ(k=2..10) 2^k = 2¹¹ − 2²     = 2,048 − 4           =      2,044
+
+4·12,207,025 − 3·2,044 = 48,828,100 − 6,132 = <b>48,821,968</b></div></div></details>
+  </div>
+
+  <div class="prob practice"><span class="tag">N7 · 15 pts</span>
+    <p>(a) Solve <span class="f">a<sub>n</sub> = 2a<sub>n−1</sub> + 15a<sub>n−2</sub></span> with <span class="f">a₀ = 1</span>, <span class="f">a₁ = 7</span>. (b) Solve <span class="f">d<sub>n+2</sub> − 10d<sub>n+1</sub> + 25d<sub>n</sub> = 0</span> with <span class="f">d₀ = 3</span>, <span class="f">d₁ = 20</span>.</p>
+    <details><summary>Solution</summary><div class="body"><div class="calc">(a) r² − 2r − 15 = 0  →  (r − 5)(r + 3) = 0  →  r = 5, −3
+
+    a_n = A·5^n + B·(−3)^n
+      A + B = 1
+      5A − 3B = 7   →   5 − 5B − 3B = 7  →  B = −1/4,  A = 5/4
+
+    a_n = (5·5^n − (−3)^n)/4 = <b>(5^(n+1) − (−3)^n)/4</b>
+
+    check a₂: recurrence 2·7 + 15·1 = 29;  formula (125 − 9)/4 = 29 ✓
+
+(b) r² − 10r + 25 = 0  →  (r − 5)² = 0  →  r = 5 REPEATED
+
+    d_n = (A + Bn)·5^n
+      n=0: A = 3
+      n=1: (3 + B)·5 = 20  →  3 + B = 4  →  B = 1
+
+    d_n = <b>(3 + n)·5^n</b>
+
+    check d₂: recurrence 10·20 − 25·3 = 125;  formula 5·25 = 125 ✓</div></div></details>
+  </div>
+</section>
+
+<section id="card">
+  <div class="sechead"><span class="num">12</span><h2>The index card</h2></div>
+  <p class="lede">One double-sided 3″×5″ card. This exam rewards the card more than midterm 1 did, because the procedures have more steps and more places to misremember a modulus.</p>
+
+  <div class="cardgrid">
+    <div class="card3x5">
+      <h4>Side A — number theory</h4>
+      <ul>
+        <li>Euclid back-substitution layout, one tiny worked example</li>
+        <li><span class="f">ax ≡ b (mod m)</span>: let <span class="f">d = gcd(a,m)</span>; no solution if <span class="f">d ∤ b</span>; else divide all three and the answer modulus is <span class="f">m/d</span></li>
+        <li>CRT by substitution: <span class="f">x = a₁ + m₁k</span>, sub into the second, invert, back-substitute; final modulus <span class="f">m₁m₂</span></li>
+        <li>Fermat: <span class="f">a<sup>p−1</sup> ≡ 1</span> if <span class="f">p ∤ a</span> — reduce exponent mod <span class="f">p−1</span></li>
+        <li>Euler: <span class="f">a<sup>φ(n)</sup> ≡ 1</span> if <span class="f">gcd(a,n)=1</span></li>
+        <li><span class="f">φ(pq) = (p−1)(q−1)</span>, <span class="f">φ(p<sup>k</sup>) = p<sup>k</sup> − p<sup>k−1</sup></span>, multiplicative on coprimes</li>
+        <li>Order divides <span class="f">φ(n)</span></li>
+      </ul>
+    </div>
+    <div class="card3x5">
+      <h4>Side B — ciphers, RSA, recurrences</h4>
+      <ul>
+        <li>A=0 … Z=25 (write the whole row out — you will use it and counting on your fingers wastes minutes)</li>
+        <li>Key reuse: <span class="f">c₁ − c₂ = m₁ − m₂</span></li>
+        <li>RSA order of operations: <span class="f">n = pq</span> → <span class="f">φ = (p−1)(q−1)</span> → <span class="f">d = e⁻¹ mod φ</span>; encrypt mod <span class="v">n</span>, invert mod <span class="f">φ</span></li>
+        <li><span class="f">Σ<sub>k=m..n</sub> r<sup>k</sup> = (r<sup>n+1</sup> − r<sup>m</sup>)/(r−1)</span></li>
+        <li>Characteristic equation; distinct roots <span class="f">Ar₁<sup>n</sup> + Br₂<sup>n</sup></span>; repeated root <span class="f">(A+Bn)r<sup>n</sup></span></li>
+        <li>Catalan <span class="f">1,1,2,5,14,42,132</span> and the convolution recurrence</li>
+        <li>Powers of 2, 3, 5 up to about the 13th — the sums need them</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:20px">The single highest-value item is the A–Z row. The second is the “which modulus goes where” line for RSA, because that is the error that turns a 15-point problem into zero.</p>
+</section>
+
+<section id="traps">
+  <div class="sechead"><span class="num">13</span><h2>The traps</h2></div>
+  <p class="lede">Ranked by how often they cost points on this specific material.</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th style="width:38%">Trap</th><th>What to do instead</th></tr></thead>
+    <tbody>
+      <tr><td><b>Inverting <span class="v">e</span> mod <span class="v">n</span> in RSA</b></td><td>The inverse is taken modulo <span class="f">φ(n)</span>, always. The exponentiation happens modulo <span class="v">n</span>. Write both moduli down before you start computing.</td></tr>
+      <tr><td><b>Applying Fermat when <span class="f">p | a</span></b></td><td>Say the hypothesis out loud: <span class="v">p</span> prime <i>and</i> <span class="f">p ∤ a</span>. When it fails, the problem is usually easier — <span class="f">a ≡ 0</span>, so every power is 0. AB 4.3(c) is exactly this.</td></tr>
+      <tr><td><b>Assuming the answer modulus is the original one</b></td><td>For <span class="f">ax ≡ b (mod m)</span> with <span class="f">gcd = d &gt; 1</span>, the modulus of the answer is <span class="f">m/d</span>. That is what “largest <span class="v">n</span>” is asking.</td></tr>
+      <tr><td><b>Forgetting to reduce the exponent at all</b></td><td>A non-graphing calculator cannot hold <span class="f">9<sup>1015</sup></span>. Reduce the exponent by Fermat or Euler first, then use repeated squaring on what's left.</td></tr>
+      <tr><td><b>Reducing the exponent mod the wrong thing</b></td><td>Exponents reduce mod <span class="f">p−1</span> (or <span class="f">φ(n)</span>), never mod <span class="v">p</span>. Bases reduce mod <span class="v">p</span>. Two different moduli, two different roles.</td></tr>
+      <tr><td><b>Attacking a reused one-time pad message by message</b></td><td>Subtract the two <i>ciphertexts</i> first. The key cancels and you get <span class="f">m₁ − m₂</span>, which is enough to pick the pair out of the candidate list.</td></tr>
+      <tr><td><b>Off-by-one in a geometric sum</b></td><td>Numerator top is <span class="f">r<sup>n+1</sup></span>, one past the last index; bottom is <span class="f">r<sup>m</sup></span>, the first index itself. Verify on a two-term case before trusting it.</td></tr>
+      <tr><td><b>Using <span class="f">Ar<sup>n</sup> + Br<sup>n</sup></span> for a repeated root</b></td><td>That collapses into a single constant and cannot meet two initial conditions. A repeated root requires the <span class="f">(A + Bn)r<sup>n</sup></span> form.</td></tr>
+      <tr><td><b>Not rearranging before reading off the characteristic equation</b></td><td><span class="f">b<sub>n</sub> = 3b<sub>n−1</sub> + 40b<sub>n−2</sub></span> gives <span class="f">r² − 3r − 40 = 0</span>, with signs flipped. Move everything to one side first.</td></tr>
+      <tr><td><b>Distrusting fractional constants</b></td><td><span class="f">23/13</span> and <span class="f">−27/4</span> are correct answers in HW 6. Verify against a term you computed from the recurrence rather than rounding or re-deriving.</td></tr>
+      <tr><td><b>Double counting in a recurrence setup</b></td><td>Check that your cases are mutually exclusive. If one object fits two cases, the recurrence overcounts. Test by computing <span class="f">a₂</span> both ways.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>A study order for the next five days</h3>
+  <p>Do the mock exam cold, today, before rereading anything — it will tell you which of the three blocks is weakest. Then work the practice set for that block, then redo the graded problems from their statements alone. Her own problems are the best predictor of her exam phrasing, and AB 4.1, AB 5.2 and AB 6.3 are the three most likely templates to reappear.</p>
+  <p>One structural note: HW 4's reading is load-bearing for HW 5. Euler's theorem is the reason RSA decryption works, so if the number theory is shaky, fixing that fixes two thirds of the exam at once. Start there rather than with recurrences, which stand alone.</p>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Built from the Math 31003 course page (Barton, Fall 2026), covering HW 4–6 and their suggested reading in Levin <i>Discrete Mathematics: An Open Introduction</i> §§4.1–4.4, 6.2.4–6.2.5; Lehman–Leighton–Meyer <i>Mathematics for Computer Science</i> §§9.10–9.11, 14.2, 22.3; and Junghenn <i>Discrete Mathematics with Coding</i> §§24.3, 25.1–25.10.</p>
+    <p style="margin-bottom:0">Every numeric answer was computed and independently cross-checked. The bracket-matching count was verified by direct enumeration, every closed form was checked against terms generated from its own recurrence, and both RSA setups were confirmed by round-tripping a message.</p>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll("button[data-scope]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var host = document.querySelector(btn.dataset.scope);
+    if(!host) return;
+    var open = btn.dataset.act === "open";
+    host.querySelectorAll("details").forEach(function(d){ d.open = open; });
+  });
+});
+</script>
+
+</body></html>
